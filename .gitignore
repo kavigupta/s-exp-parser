@@ -1,0 +1,14 @@
+
+# idea
+.idea
+
+# pypi
+*.egg-info
+env
+
+# python
+*.pyc
+
+# coverage
+.coverage
+cover
