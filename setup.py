@@ -21,5 +21,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.5",
-    install_requires=[],
+    install_requires=["attrs==19.3.0"],
 )
