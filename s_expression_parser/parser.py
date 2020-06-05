@@ -37,6 +37,9 @@ class nil:
     pass
 
 
+nil = nil()
+
+
 def parse(data, config):
     """
     Parses the given data using the given configuration.
