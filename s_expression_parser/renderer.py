@@ -18,13 +18,20 @@ class Renderer:
         if isinstance(parsed, str):
             return self._indent(parsed, indent)
 
+        if not parsed:
+            return self._indent("()", indent)
+
         single_line = self._indent(self._render_one_line(parsed), indent)
         if len(single_line) <= self.columns:
             return single_line
 
         assert isinstance(parsed, list)
+        parsed = parsed[:]
+        start = self._indent("(", indent)
+        if isinstance(parsed[0], str):
+            start += parsed.pop(0)
         return "\n".join(
-            [self._indent("(", indent)]
+            [start]
             + [self._render(x, indent + 1) for x in parsed]
             + [self._indent(")", indent)]
         )

@@ -33,6 +33,14 @@ class ParserTest(unittest.TestCase):
             ),
         )
         self.assertEqual(
+            Renderer().render(Pair("1", "2")),
+            process(
+                """
+                (1 . 2)
+                """
+            ),
+        )
+        self.assertEqual(
             Renderer().render(Pair("1", Pair("2", Pair("3", nil)))),
             process(
                 """
@@ -48,14 +56,21 @@ class ParserTest(unittest.TestCase):
                 """
             ),
         )
+        self.assertEqual(
+            self.parse_and_rerender("(1 2 (3 (4 ())))"),
+            process(
+                """
+                (1 2 (3 (4 ())))
+                """
+            ),
+        )
 
     def test_wrapping(self):
         self.assertEqual(
             self.parse_and_rerender("(1 2 3 4 5 6 (7) (8))", columns=10),
             process(
                 """
-                (
-                  1
+                (1
                   2
                   3
                   4
@@ -79,11 +94,9 @@ class ParserTest(unittest.TestCase):
             ),
             process(
                 """
-                (
-                  define
+                (define
                   (factorial x)
-                  (
-                    if
+                  (if
                     (zero? x)
                     1
                     (* x (factorial (- x 1)))
