@@ -5,6 +5,7 @@
 # pypi
 *.egg-info
 env
+dist
 
 # python
 *.pyc
