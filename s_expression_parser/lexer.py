@@ -11,6 +11,9 @@ def lex(data, special_symbols):
         special_symbols: the set of symbols to handle
     """
     special_symbols = set(special_symbols) | set(PARENS.keys()) | set(PARENS.values())
+
+    special_symbols = sorted(special_symbols, key=lambda x: (-len(x), x))
+
     symbol_stream = list(data)[::-1]  # reverse to pop from the front
     tokens = []
 
@@ -19,9 +22,12 @@ def lex(data, special_symbols):
         if current.isspace():
             symbol_stream.pop()
             return
-        if current in special_symbols:
-            tokens.append(symbol_stream.pop())
-            return
+        for symbol in special_symbols:
+            last_idx = -len(symbol)
+            if symbol_stream[last_idx:] == list(symbol)[::-1]:
+                symbol_stream[last_idx:] = []
+                tokens.append(symbol)
+                return
         if current == '"':
             token_items = [symbol_stream.pop()]
             while symbol_stream:
