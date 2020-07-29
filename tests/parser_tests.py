@@ -59,7 +59,8 @@ class ParserTest(unittest.TestCase):
             parse("(,@(1 ,$) ,@hi)", ParserConfig({",@": "unquote-splicing"}, False)),
             [
                 Pair(
-                    Pair("unquote-splicing", Pair(Pair("1", Pair(",$", nil)), nil)), Pair(Pair("unquote-splicing", Pair("hi", nil)), nil)
+                    Pair("unquote-splicing", Pair(Pair("1", Pair(",$", nil)), nil)),
+                    Pair(Pair("unquote-splicing", Pair("hi", nil)), nil),
                 )
             ],
         )
