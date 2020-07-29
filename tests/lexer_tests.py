@@ -24,9 +24,14 @@ class LexerTest(unittest.TestCase):
     def test_with_symbols(self):
         self.assertEqual(lex("abc", {}), ["abc"])
         self.assertEqual(lex("abc", {"a"}), ["a", "bc"])
+
+    @timeout(1)
+    def test_multiple_symbols(self):
+        self.assertEqual(lex("abc", {"a", "ab"}), ["ab", "c"])
+        self.assertEqual(lex("aaaaa", {"a", "aa"}), ["aa", "aa", "a"])
         self.assertEqual(lex("abc", {"b"}), ["a", "b", "c"])
 
     @timeout(1)
-    def test_with_symbols(self):
+    def test_with_spaces_and_symbols(self):
         self.assertEqual(lex("a . b", {"."}), ["a", ".", "b"])
         self.assertEqual(lex('a . "a . b"', {"."}), ["a", ".", '"a . b"'])
