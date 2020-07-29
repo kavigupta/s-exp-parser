@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="s-exp-parser",
-    version="1.0.0",
+    version="1.1.0",
     author="Kavi Gupta",
     author_email="s_exp_parser@kavigupta.org",
     description="S expression parser for python.",
