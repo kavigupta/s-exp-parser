@@ -53,3 +53,13 @@ class ParserTest(unittest.TestCase):
                 )
             ],
         )
+
+    def test_multi_char_prefix(self):
+        self.assertEqual(
+            parse("(,@(1 ,$) ,@hi)", ParserConfig({",@": "unquote-splicing"}, False)),
+            [
+                Pair(
+                    Pair("unquote-splicing", Pair(Pair("1", Pair(",$", nil)), nil)), Pair(Pair("unquote-splicing", Pair("hi", nil)), nil)
+                )
+            ],
+        )
