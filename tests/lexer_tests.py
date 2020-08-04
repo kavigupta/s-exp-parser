@@ -15,6 +15,21 @@ class LexerTest(unittest.TestCase):
         )
 
     @timeout(1)
+    def test_lex_with_comments(self):
+        self.assertEqual(
+            lex("hi; tahosetnuhasnetuhsnatehu thasntuht this doesn't matter", {}),
+            ["hi"],
+        )
+        self.assertEqual(lex("hi;;;;;;; comment can have multiple things", {}), ["hi"])
+        self.assertEqual(
+            lex(
+                "hi;;;;;;; comment can have multiple things\n but this is not a comment ; and this is",
+                {},
+            ),
+            ["hi", "but", "this", "is", "not", "a", "comment"],
+        )
+
+    @timeout(1)
     def test_parens_lex(self):
         self.assertEqual(lex("()]", {}), ["(", ")", "]"])
         self.assertEqual(lex("(1 2 3)", {}), ["(", "1", "2", "3", ")"])

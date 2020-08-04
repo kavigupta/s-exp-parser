@@ -10,7 +10,7 @@ def lex(data, special_symbols):
         data: the data to parse
         special_symbols: the set of symbols to handle
     """
-    special_symbols = set(special_symbols) | set(PARENS.keys()) | set(PARENS.values())
+    special_symbols = set(special_symbols) | set(PARENS.keys()) | set(PARENS.values()) | {";"}
 
     special_symbols = sorted(special_symbols, key=lambda x: (-len(x), x))
 
@@ -21,6 +21,10 @@ def lex(data, special_symbols):
         current = symbol_stream[-1]
         if current.isspace():
             symbol_stream.pop()
+            return
+        if current == ";":
+            while symbol_stream and symbol_stream[-1] != "\n":
+                symbol_stream.pop()
             return
         for symbol in special_symbols:
             last_idx = -len(symbol)
