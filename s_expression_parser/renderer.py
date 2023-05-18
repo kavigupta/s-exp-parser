@@ -7,6 +7,7 @@ from .parser import Pair, nil
 class Renderer:
     indent = attr.ib(default=2)
     columns = attr.ib(default=120)
+    nil_as_word = attr.ib(default=False)
 
     def render_multiple(self, parsed):
         return "".join(self.render(x) for x in parsed)
@@ -19,7 +20,7 @@ class Renderer:
             return self._indent(parsed, indent)
 
         if not parsed:
-            return self._indent("()", indent)
+            return self._indent("nil" if self.nil_as_word else "()", indent)
 
         single_line = self._indent(self._render_one_line(parsed), indent)
         if len(single_line) <= self.columns:

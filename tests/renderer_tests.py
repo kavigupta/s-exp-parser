@@ -105,3 +105,33 @@ class ParserTest(unittest.TestCase):
                 """
             ),
         )
+
+    def test_nil_as_word(self):
+        self.assertEqual(
+            Renderer(nil_as_word=True).render(nil),
+            process(
+                """
+                nil
+                """
+            ),
+        )
+
+        self.assertEqual(
+            Renderer(nil_as_word=True, columns=10).render_multiple(
+                parse("(1 2 3 4 5 6 (7) (8) ())", ParserConfig({"'", "quote"}, True))
+            ),
+            process(
+                """
+                (1
+                  2
+                  3
+                  4
+                  5
+                  6
+                  (7)
+                  (8)
+                  nil
+                )
+                """
+            ),
+        )
