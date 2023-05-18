@@ -40,6 +40,8 @@ class Renderer:
     def _render_one_line(self, parsed):
         if isinstance(parsed, str):
             return parsed
+        if not parsed:
+            return "nil" if self.nil_as_word else "()"
         return "(" + " ".join(self._render_one_line(x) for x in parsed) + ")"
 
     def _indent(self, string, indentation):

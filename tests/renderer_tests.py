@@ -135,3 +135,23 @@ class ParserTest(unittest.TestCase):
                 """
             ),
         )
+
+    def test_nil_as_word_in_list(self):
+
+        self.assertEqual(
+            Renderer(nil_as_word=True, columns=10).render(Pair(nil, nil)),
+            process(
+                """
+                (nil)
+                """
+            ),
+        )
+
+    def test_nil_as_word_large(self):
+        text = Renderer(nil_as_word=True, columns=10).render_multiple(
+            parse(
+                "(Module (FunctionDef &f:0 (arguments () ((arg &x:1 None None)) None () () None ()) (semi (FunctionDef &g:1 (arguments () ((arg &x:2 None None)) None () () None ((Name &x:1 (Load)))) (Return (Name &x:2 (Load))) () None None) (Return (Name &x:1 (Load)))) () None None) ())",
+                ParserConfig({"'", "quote"}, True),
+            ),
+        )
+        self.assertFalse("()" in text)
