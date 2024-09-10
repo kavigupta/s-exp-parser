@@ -59,9 +59,11 @@ class Pair:
             if id(current) in repr_each:
                 continue
             if id(current.car) in repr_each and id(current.cdr) in repr_each:
-                repr_each[id(current)] = (
-                    f"Pair({repr_each[id(current.car)]}, {repr_each[id(current.cdr)]})"
+                repr_car, repr_cdr = (
+                    repr_each[id(current.car)],
+                    repr_each[id(current.cdr)],
                 )
+                repr_each[id(current)] = f"Pair({repr_car}, {repr_cdr})"
                 continue
             if id(current) in attempted:
                 return "..."
