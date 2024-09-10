@@ -12,6 +12,11 @@ cal_scheme = ParserConfig(
 )
 
 cal_scheme_with_dots = ParserConfig(
-    {"'": "quote", "`": "quasiquote", ",": "unquote", ",@": "unquote-splicing",},
+    {
+        "'": "quote",
+        "`": "quasiquote",
+        ",": "unquote",
+        ",@": "unquote-splicing",
+    },
     dots_are_cons=True,
 )

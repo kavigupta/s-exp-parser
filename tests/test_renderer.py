@@ -1,8 +1,7 @@
 import unittest
-from timeout_decorator import timeout
 from textwrap import dedent
 
-from s_expression_parser import parse, ParserConfig, Pair, nil, Renderer
+from s_expression_parser import Pair, ParserConfig, Renderer, nil, parse
 
 
 def process(string):
@@ -137,7 +136,6 @@ class ParserTest(unittest.TestCase):
         )
 
     def test_nil_as_word_in_list(self):
-
         self.assertEqual(
             Renderer(nil_as_word=True, columns=10).render(Pair(nil, nil)),
             process(

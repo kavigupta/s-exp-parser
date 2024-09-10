@@ -1,6 +1,6 @@
 import attr
 
-from .lexer import lex, PARENS
+from .lexer import PARENS, lex
 
 
 @attr.s

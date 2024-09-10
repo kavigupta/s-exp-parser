@@ -10,7 +10,9 @@ def lex(data, special_symbols):
         data: the data to parse
         special_symbols: the set of symbols to handle
     """
-    special_symbols = set(special_symbols) | set(PARENS.keys()) | set(PARENS.values()) | {";"}
+    special_symbols = (
+        set(special_symbols) | set(PARENS.keys()) | set(PARENS.values()) | {";"}
+    )
 
     special_symbols = sorted(special_symbols, key=lambda x: (-len(x), x))
 

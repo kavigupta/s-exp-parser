@@ -1,7 +1,6 @@
 import unittest
-from timeout_decorator import timeout
 
-from s_expression_parser import parse, ParserConfig, Pair, nil
+from s_expression_parser import Pair, ParserConfig, nil, parse
 
 
 class ParserTest(unittest.TestCase):
@@ -19,7 +18,8 @@ class ParserTest(unittest.TestCase):
             [Pair("+", Pair("2", Pair(Pair("3", nil), nil)))],
         )
         self.assertEqual(
-            parse("1 (2)", ParserConfig({}, False)), ["1", Pair("2", nil)],
+            parse("1 (2)", ParserConfig({}, False)),
+            ["1", Pair("2", nil)],
         )
 
     def test_unmatched_parens(self):
@@ -38,10 +38,12 @@ class ParserTest(unittest.TestCase):
 
     def test_dots_are_cons(self):
         self.assertEqual(
-            parse("(1 . 2)", ParserConfig({}, True)), [Pair("1", "2")],
+            parse("(1 . 2)", ParserConfig({}, True)),
+            [Pair("1", "2")],
         )
         self.assertEqual(
-            parse("(1 . (2))", ParserConfig({}, True)), [Pair("1", Pair("2", nil))],
+            parse("(1 . (2))", ParserConfig({}, True)),
+            [Pair("1", Pair("2", nil))],
         )
 
     def test_prefixing(self):
