@@ -1,6 +1,6 @@
 import attr
 
-from .lexer import lex, PARENS
+from .lexer import PARENS, lex
 
 
 @attr.s
@@ -62,7 +62,7 @@ def parse(data, config):
         if start == close_paren:
             return None
         if start in PARENS.values():
-            raise ValueError("Unmatched parenthesis {}".format(start))
+            raise ValueError(f"Unmatched parenthesis {start}")
         if start in config.prefix_symbols:
             atom = parse_atom()
             return Pair(config.prefix_symbols[start], Pair(atom, nil))
@@ -78,8 +78,8 @@ def parse(data, config):
                 raise ValueError(
                     (
                         "If dots are used to represent cons, then a dot"
-                        " must be followed by a single atom, but instead was followed by {}"
-                    ).format(rest)
+                        f" must be followed by a single atom, but instead was followed by {rest}"
+                    )
                 )
             return rest.car
         rest = parse_tail(close_paren)
