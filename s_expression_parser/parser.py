@@ -1,3 +1,4 @@
+from typing import Union
 import attr
 
 from .lexer import PARENS, lex
@@ -113,9 +114,10 @@ def parse(data, config):
         if not token_stream:
             raise ValueError("Unexpected end of file")
         assert token_stream.pop() == close_paren
-        result = nil
+        result: Union[Pair, nil] = nil
         for element in reversed(elements):
             if element == ".":
+                # pylint: disable=no-member
                 if result is nil or result.cdr is not nil:
                     raise ValueError(
                         "Invalid use of . in list; must be followed by a single atom, but was followed by "
