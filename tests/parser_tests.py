@@ -19,7 +19,8 @@ class ParserTest(unittest.TestCase):
             [Pair("+", Pair("2", Pair(Pair("3", nil), nil)))],
         )
         self.assertEqual(
-            parse("1 (2)", ParserConfig({}, False)), ["1", Pair("2", nil)],
+            parse("1 (2)", ParserConfig({}, False)),
+            ["1", Pair("2", nil)],
         )
 
     def test_unmatched_parens(self):
@@ -38,10 +39,12 @@ class ParserTest(unittest.TestCase):
 
     def test_dots_are_cons(self):
         self.assertEqual(
-            parse("(1 . 2)", ParserConfig({}, True)), [Pair("1", "2")],
+            parse("(1 . 2)", ParserConfig({}, True)),
+            [Pair("1", "2")],
         )
         self.assertEqual(
-            parse("(1 . (2))", ParserConfig({}, True)), [Pair("1", Pair("2", nil))],
+            parse("(1 . (2))", ParserConfig({}, True)),
+            [Pair("1", Pair("2", nil))],
         )
 
     def test_prefixing(self):
@@ -63,4 +66,14 @@ class ParserTest(unittest.TestCase):
                     Pair(Pair("unquote-splicing", Pair("hi", nil)), nil),
                 )
             ],
+        )
+
+    def test_parse_extremely_long(self):
+        count = 10**4
+        structure = nil
+        for _ in range(count):
+            structure = Pair(nil, structure)
+        self.assertEqual(
+            parse("(" + "()" * count + ")", ParserConfig({}, False)),
+            [structure],
         )

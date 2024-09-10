@@ -155,3 +155,13 @@ class ParserTest(unittest.TestCase):
             ),
         )
         self.assertFalse("()" in text)
+
+    def test_render_extremely_long(self):
+        count = 10**4
+        structure = nil
+        for _ in range(count):
+            structure = Pair(nil, structure)
+        self.assertEqual(
+            "(\n" + "  ()\n" * count + ")",
+            Renderer(columns=1).render(structure),
+        )
