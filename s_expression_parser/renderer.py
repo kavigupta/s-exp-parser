@@ -53,11 +53,23 @@ class Renderer:
             return []
         if not isinstance(parsed, Pair):
             return parsed
-        result = []
-        while isinstance(parsed, Pair):
-            result.append(self._to_list(parsed.car))
-            parsed = parsed.cdr
-        if parsed is not nil:
-            result.append(".")
-            result.append(parsed)
-        return result
+        stack = [([], parsed)]
+        while True:
+            current_list, current_pair = stack.pop()
+            if current_pair is nil:
+                if not stack:
+                    return current_list
+                stack[-1][0].append(current_list)
+                continue
+            if not isinstance(current_pair, Pair):
+                if current_list:
+                    current_list.append(".")
+                    current_list.append(current_pair)
+                else:
+                    current_list = current_pair
+                if not stack:
+                    return current_list
+                stack[-1][0].append(current_list)
+                continue
+            stack.append((current_list, current_pair.cdr))
+            stack.append(([], current_pair.car))

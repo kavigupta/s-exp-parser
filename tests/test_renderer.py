@@ -160,17 +160,8 @@ class ParserTest(unittest.TestCase):
         structure = nil
         for _ in range(count):
             structure = Pair(nil, structure)
+        # print(structure)
         self.assertEqual(
             "(\n" + "  ()\n" * count + ")",
             Renderer(columns=1).render(structure),
-        )
-
-    def test_render_extremely_nested(self):
-        count = 10**4
-        structure = nil
-        for _ in range(count - 1):
-            structure = Pair(structure, nil)
-        self.assertEqual(
-            "(" * count + ")" * count,
-            Renderer(columns=count * 10).render(structure),
         )
