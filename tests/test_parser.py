@@ -66,3 +66,13 @@ class ParserTest(unittest.TestCase):
                 )
             ],
         )
+
+    def test_parse_extremely_long(self):
+        count = 10**4
+        structure = nil
+        for _ in range(count):
+            structure = Pair(nil, structure)
+        self.assertEqual(
+            parse("(" + "()" * count + ")", ParserConfig({}, False)),
+            [structure],
+        )

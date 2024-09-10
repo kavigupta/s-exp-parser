@@ -49,10 +49,27 @@ class Renderer:
         return " " * indentation * self.indent + string
 
     def _to_list(self, parsed):
-        if parsed == nil:
+        if parsed is nil:
             return []
-        if isinstance(parsed, Pair):
-            if isinstance(parsed.cdr, Pair) or parsed.cdr is nil:
-                return [self._to_list(parsed.car), *self._to_list(parsed.cdr)]
-            return [self._to_list(parsed.car), ".", self._to_list(parsed.cdr)]
-        return parsed
+        if not isinstance(parsed, Pair):
+            return parsed
+        stack = [([], parsed)]
+        while True:
+            current_list, current_pair = stack.pop()
+            if current_pair is nil:
+                if not stack:
+                    return current_list
+                stack[-1][0].append(current_list)
+                continue
+            if not isinstance(current_pair, Pair):
+                if current_list:
+                    current_list.append(".")
+                    current_list.append(current_pair)
+                else:
+                    current_list = current_pair
+                if not stack:
+                    return current_list
+                stack[-1][0].append(current_list)
+                continue
+            stack.append((current_list, current_pair.cdr))
+            stack.append(([], current_pair.car))
