@@ -73,15 +73,17 @@ def parse(data, config):
         if first is None:
             return nil
         if first == "." and config.dots_are_cons:
-            rest = parse_tail(close_paren)
-            if not isinstance(rest, Pair) or rest.cdr != nil:
+            rest = parse_atom(close_paren)
+            if not token_stream or token_stream[-1] != close_paren:
                 raise ValueError(
                     (
                         "If dots are used to represent cons, then a dot"
-                        f" must be followed by a single atom, but instead was followed by {rest}"
+                        " must be followed by a single atom, but instead was followed by "
+                        + (token_stream[-1] if token_stream else "EOF")
                     )
                 )
-            return rest.car
+            assert token_stream.pop() == close_paren
+            return rest
         rest = parse_tail(close_paren)
         return Pair(first, rest)
 
