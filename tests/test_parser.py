@@ -1,7 +1,6 @@
 import unittest
-from timeout_decorator import timeout
 
-from s_expression_parser import parse, ParserConfig, Pair, nil
+from s_expression_parser import Pair, ParserConfig, nil, parse
 
 
 class ParserTest(unittest.TestCase):
