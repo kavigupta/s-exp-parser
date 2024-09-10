@@ -1,4 +1,5 @@
 from typing import Union
+
 import attr
 
 from .lexer import PARENS, lex
