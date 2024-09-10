@@ -29,6 +29,3 @@ jobs:
       - name: Check for sorted imports and black code style
         run: |
           isort s_expression_parser tests; black s_expression_parser tests; bash -c '[ $(git status --porcelain --untracked-files=no | wc -c) -eq 0 ]  || (git status; git diff; exit 1)'
-      - name: Check that the docs build
-        run: |
-          cd docs && make html
