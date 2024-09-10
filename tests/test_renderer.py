@@ -9,7 +9,8 @@ def process(string):
 
 
 class ParserTest(unittest.TestCase):
-    def parse_and_rerender(self, string, **kwargs):
+    @staticmethod
+    def parse_and_rerender(string, **kwargs):
         return Renderer(**kwargs).render_multiple(
             parse(string, ParserConfig({"'", "quote"}, True))
         )
