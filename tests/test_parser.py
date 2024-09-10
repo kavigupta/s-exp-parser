@@ -76,3 +76,13 @@ class ParserTest(unittest.TestCase):
             parse("(" + "()" * count + ")", ParserConfig({}, False)),
             [structure],
         )
+
+    def test_parse_extremely_nested(self):
+        count = 10**4
+        structure = nil
+        for _ in range(count - 1):
+            structure = Pair(structure, nil)
+        self.assertEqual(
+            parse("(" * count + ")" * count, ParserConfig({}, False)),
+            [structure],
+        )

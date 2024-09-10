@@ -26,10 +26,48 @@ class ParserConfig:
         return set(self.prefix_symbols) | ({"."} if self.dots_are_cons else set())
 
 
-@attr.s
+@attr.s(eq=False, repr=False)
 class Pair:
     car = attr.ib()
     cdr = attr.ib()
+
+    def __eq__(self, other):
+        comparisons_stack = [(self, other)]
+        while comparisons_stack:
+            a, b = comparisons_stack.pop()
+            if isinstance(a, Pair) != isinstance(b, Pair):
+                return False
+            if not isinstance(a, Pair) and not isinstance(b, Pair):
+                if a != b:
+                    return False
+                continue
+            comparisons_stack.append((a.cdr, b.cdr))
+            comparisons_stack.append((a.car, b.car))
+        return True
+
+    def __repr__(self):
+        repr_each = {}
+        attempted = set()
+        stack = [self]
+        while stack:
+            current = stack.pop()
+            if not isinstance(current, Pair):
+                repr_each[id(current)] = repr(current)
+                continue
+            if id(current) in repr_each:
+                continue
+            if id(current.car) in repr_each and id(current.cdr) in repr_each:
+                repr_each[id(current)] = (
+                    f"Pair({repr_each[id(current.car)]}, {repr_each[id(current.cdr)]})"
+                )
+                continue
+            if id(current) in attempted:
+                return "..."
+            attempted.add(id(current))
+            stack.append(current)
+            stack.append(current.cdr)
+            stack.append(current.car)
+        return repr_each[id(self)]
 
 
 @attr.s
@@ -69,23 +107,24 @@ def parse(data, config):
         return start
 
     def parse_tail(close_paren):
-        first = parse_atom(close_paren)
-        if first is None:
-            return nil
-        if first == "." and config.dots_are_cons:
-            rest = parse_atom(close_paren)
-            if not token_stream or token_stream[-1] != close_paren:
-                raise ValueError(
-                    (
-                        "If dots are used to represent cons, then a dot"
-                        " must be followed by a single atom, but instead was followed by "
-                        + (token_stream[-1] if token_stream else "EOF")
+        elements = []
+        while token_stream and token_stream[-1] != close_paren:
+            elements.append(parse_atom(close_paren))
+        if not token_stream:
+            raise ValueError("Unexpected end of file")
+        assert token_stream.pop() == close_paren
+        result = nil
+        for element in reversed(elements):
+            if element == ".":
+                if result is nil or result.cdr is not nil:
+                    raise ValueError(
+                        "Invalid use of . in list; must be followed by a single atom, but was followed by "
+                        + repr(result)
                     )
-                )
-            assert token_stream.pop() == close_paren
-            return rest
-        rest = parse_tail(close_paren)
-        return Pair(first, rest)
+                result = result.car
+            else:
+                result = Pair(element, result)
+        return result
 
     expressions = []
     while token_stream:
